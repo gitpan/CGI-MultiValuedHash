@@ -1,3 +1,11 @@
+2004-06-06   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Release 1.09.
+
+	* Updated CGI::MultiValuedHash (now v1.09 up from v1.081) to fix a bug in
+	the to_html_encoded_table() method where key names were not being output in
+	the generated HTML table.  No other changes.
+
 2003-03-16   Darren Duncan <perl@DarrenDuncan.net>
 
 	* Release 1.081.

@@ -8,7 +8,7 @@
 
 BEGIN { $| = 1; print "1..45\n"; }
 END {print "not ok 1\n" unless $loaded;}
-use CGI::MultiValuedHash 1.081;
+use CGI::MultiValuedHash 1.09;
 $loaded = 1;
 print "ok 1\n";
 use strict;
