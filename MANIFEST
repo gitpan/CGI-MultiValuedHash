@@ -1,6 +1,6 @@
 ChangeLog
+lib/CGI/MultiValuedHash.pm
 Makefile.PL
 MANIFEST
-MultiValuedHash.pm
 ReadMe
-test.pl
+t/CGI-MultiValuedHash.t

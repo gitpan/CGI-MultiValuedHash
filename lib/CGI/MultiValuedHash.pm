@@ -1,6 +1,6 @@
 =head1 NAME
 
-CGI::MultiValuedHash - Store and manipulate url-encoded data.
+CGI::MultiValuedHash - Store and manipulate url-encoded data
 
 =cut
 
@@ -9,15 +9,18 @@ CGI::MultiValuedHash - Store and manipulate url-encoded data.
 package CGI::MultiValuedHash;
 require 5.004;
 
-# Copyright (c) 1999-2002, Darren R. Duncan. All rights reserved. This module is
-# free software; you can redistribute it and/or modify it under the same terms as
-# Perl itself.  However, I do request that this copyright information remain
-# attached to the file.  If you modify this module and redistribute a changed
-# version then please attach a note listing the modifications.
+# Copyright (c) 1999-2003, Darren R. Duncan.  All rights reserved.  This module
+# is free software; you can redistribute it and/or modify it under the same terms
+# as Perl itself.  However, I do request that this copyright information and
+# credits remain attached to the file.  If you modify this module and
+# redistribute a changed version then please attach a note listing the
+# modifications.  This module is available "as-is" and the author can not be held
+# accountable for any problems resulting from its use.
 
 use strict;
+use warnings;
 use vars qw($VERSION @ISA);
-$VERSION = '1.08';
+$VERSION = '1.081';
 
 ######################################################################
 
@@ -33,13 +36,13 @@ $VERSION = '1.08';
 
 =head2 Nonstandard Modules
 
-	Data::MultiValuedHash 1.08 (parent class)
+	Data::MultiValuedHash 1.081 (parent class)
 
 =cut
 
 ######################################################################
 
-use Data::MultiValuedHash 1.08;
+use Data::MultiValuedHash 1.081;
 @ISA = qw( Data::MultiValuedHash );
 
 ######################################################################
@@ -76,7 +79,7 @@ use Data::MultiValuedHash 1.08;
 		@{CGI::MultiValuedHash->batch_from_file( \*FH, $case_insensitive )};
 	flock( FH, 8 );
 	close( FH );
-		
+
 	foreach my $record (@record_list) {
 		print "\nSubmitted by:".$record->fetch_value( 'name' )."\n";
 		print "\nTracking cookie:".$record->fetch_value( 'track' )."\n";
@@ -253,7 +256,7 @@ sub from_url_encoded_string {
 		foreach my $value (@values) {
 			$value =~ tr/+/ /;
 			$value =~ s/%([0-9a-fA-F]{2})/pack("c",hex($1))/ge;
-		
+
 			CORE::push( @{$rh_main_hash->{$key}}, $value );
 		}
 	}
@@ -289,7 +292,7 @@ sub to_file {
 	$delim_kvpair ||= "\n";
 	$delim_values ||= undef;
 	$delim_recs ||= "\n=\n";
-	
+
 	local $\ = undef;
 
 	!$self->keys_count() and !$use_empty and return( 0 );
@@ -298,7 +301,7 @@ sub to_file {
 		$self->to_url_encoded_string( $delim_kvpair, $delim_values );
 
 	print $fh "$delim_recs$record_str" or return( undef );
-	
+
 	return( 1 );
 }
 
@@ -337,14 +340,14 @@ sub from_file {
 		eof( $fh ) and return( 0 );
 
 		defined( my $record_str = <$fh> ) or return( undef );
-	
+
 		$self->from_url_encoded_string( 
 			$record_str, $delim_kvpair, $delim_values );
-	
+
 		$self->keys_count() and return( 1 );
-	
+
 		$use_empty and return( 0 );
-	
+
 		redo GET_ANOTHER_REC;
 	}
 }
@@ -394,10 +397,10 @@ sub to_html_encoded_table {
 
 			CORE::push( @enc_value_list, $value_enc );
 		}
-		
+
 		CORE::push( @result, $linebreak ? join( "<br />\n", @enc_value_list ) : 
 			join( ", \n", @enc_value_list ) );
-			
+
 		CORE::push( @result, "</td></tr>\n" );
 	}
 
@@ -500,17 +503,17 @@ sub batch_to_file {
 	my @mvh_list = ref($_[0]) eq 'ARRAY' ? @{CORE::shift(@_)} : CORE::shift(@_);
 
 	ref( $fh ) eq 'GLOB' or return( undef );
-	
+
 	foreach my $mvh (@mvh_list) {
 		ref( $mvh ) eq 'Data::MultiValuedHash' and 
 			bless( $mvh, 'CGI::MultiValuedHash' );
 		ref( $mvh ) eq 'HASH' and $mvh = 
 			CGI::MultiValuedHash->new( 0, $mvh );
 		ref( $mvh ) eq "CGI::MultiValuedHash" or next;
-		
+
 		defined( $mvh->to_file( $fh, @_ ) ) or return( undef );
 	}
-	
+
 	return( 1 );
 }
 
@@ -541,7 +544,7 @@ sub batch_from_file {
 	my $use_empty = $_[3];  # fourth remaining argument
 
 	ref( $fh ) eq 'GLOB' or return( undef );
-	
+
 	my @mvh_list = ();
 	my $remaining_obj_count = ($max_obj_num <= 0) ? -1 : $max_obj_num;
 
@@ -555,8 +558,8 @@ sub batch_from_file {
 		CORE::push( @mvh_list, $mvh );
 
 		--$remaining_obj_count != 0 and redo GET_ANOTHER_REC;
-	}	
-	
+	}
+
 	# if file is of nonzero length and contains no records, or if it has a 
 	# record separator followed by no records, then we would end up with an 
 	# empty last record in our list even if empty records aren't allowed, 
@@ -564,7 +567,7 @@ sub batch_from_file {
 	if( !$use_empty and @mvh_list and !$mvh_list[-1]->keys_count() ) {
 		CORE::pop( @mvh_list );
 	}
-	
+
 	return( \@mvh_list );
 }
 
@@ -591,7 +594,7 @@ but appears on two here for clarity:
 Some query strings are the result of ISINDEX queries, and they look different:
 
 	tell&me&about&stuff
-	
+
 Cookie strings such as $ENV{HTTP_COOKIE} are different yet and look like:
 
 	name=color; type=popup_menu; values=red&green&blue&chartreuse
@@ -667,16 +670,21 @@ store everything from multi-valued fields.
 
 =head1 AUTHOR
 
-Copyright (c) 1999-2002, Darren R. Duncan. All rights reserved. This module is
-free software; you can redistribute it and/or modify it under the same terms as
-Perl itself.  However, I do request that this copyright information remain
-attached to the file.  If you modify this module and redistribute a changed
-version then please attach a note listing the modifications.
+Copyright (c) 1999-2003, Darren R. Duncan.  All rights reserved.  This module
+is free software; you can redistribute it and/or modify it under the same terms
+as Perl itself.  However, I do request that this copyright information and
+credits remain attached to the file.  If you modify this module and
+redistribute a changed version then please attach a note listing the
+modifications.  This module is available "as-is" and the author can not be held
+accountable for any problems resulting from its use.
 
 I am always interested in knowing how my work helps others, so if you put this
-module to use in any of your own code then please send me the URL. Also, if you
-make modifications to the module because it doesn't work the way you need, please
-send me a copy so that I can roll desirable changes into the main release.
+module to use in any of your own products or services then I would appreciate
+(but not require) it if you send me the website url for said product or
+service, so I know who you are.  Also, if you make non-proprietary changes to
+the module because it doesn't work the way you need, and you are willing to
+make these freely available, then please send me a copy so that I can roll
+desirable changes into the main release.
 
 Address comments, suggestions, and bug reports to B<perl@DarrenDuncan.net>.
 

@@ -3,8 +3,8 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
 	NAME	=> 'CGI::MultiValuedHash',
-	VERSION_FROM => 'MultiValuedHash.pm', # finds $VERSION
+	VERSION_FROM => 'lib/CGI/MultiValuedHash.pm', # finds $VERSION
 	PREREQ_PM => {
-		'Data::MultiValuedHash' => 1.08,
+		'Data::MultiValuedHash' => 1.081,
 	},
 );
